@@ -42,9 +42,9 @@ public class VillaAPIController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public ActionResult<VillaDTO> CreateVilla([FromBody] VillaDTO villaDTO)
     {
         ///It not works because model validation is checked by [ApiController]
@@ -76,7 +76,10 @@ public class VillaAPIController : ControllerBase
         return CreatedAtRoute("GetVilla", new { villaDTO.Id }, villaDTO);
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{id:int}", Name = "DeleteVilla")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult DeleteVilla(int id)
     {
         if (id==0)
