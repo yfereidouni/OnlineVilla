@@ -42,9 +42,9 @@ public class VillaAPIController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<VillaDTO> CreateVilla([FromBody] VillaDTO villaDTO)
     {
         ///It not works because model validation is checked by [ApiController]
