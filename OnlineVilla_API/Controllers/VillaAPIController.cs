@@ -82,7 +82,7 @@ public class VillaAPIController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult DeleteVilla(int id)
     {
-        if (id==0)
+        if (id == 0)
         {
             return BadRequest();
         }
@@ -94,6 +94,18 @@ public class VillaAPIController : ControllerBase
         }
 
         VillaStore.villaList.Remove(villa);
-        return NoContent();    
+        return NoContent();
     }
+
+    [HttpPut("{id:int}", Name = "UpdateVilla")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public IActionResult UpdateVilla(int id, [FromBody] VillaDTO villaDTO)
+    {
+        if (villaDTO == null || id != villaDTO.Id)
+        {
+            return BadRequest();
+        }
+
+    }
+
 }
