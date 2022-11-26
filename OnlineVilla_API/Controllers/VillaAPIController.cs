@@ -47,11 +47,24 @@ public class VillaAPIController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public ActionResult<VillaDTO> CreateVilla([FromBody] VillaDTO villaDTO)
     {
+        ///It not works because model validation is checked by [ApiController]
+        //if (!ModelState.IsValid)
+        //{
+        //    return BadRequest(ModelState);
+        //}
+
+        ///IF VillaName was not unique
+        if (VillaStore.villaList.FirstOrDefault(c => c.Name.ToLower() == villaDTO.Name.ToLower()) != null)
+        {
+            ModelState.AddModelError("CustomeError", "Villa already Exsist!");
+            return BadRequest(ModelState);
+        }
+
         if (villaDTO == null)
         {
             return BadRequest(villaDTO);
         }
-        if (villaDTO.Id>0)
+        if (villaDTO.Id > 0)
         {
             return StatusCode(StatusCodes.Status500InternalServerError);
         }
@@ -60,7 +73,19 @@ public class VillaAPIController : ControllerBase
         VillaStore.villaList.Add(villaDTO);
 
         //return Ok(villaDTO);
-        return CreatedAtRoute("GetVilla", new { villaDTO.Id },villaDTO);
+        return CreatedAtRoute("GetVilla", new { villaDTO.Id }, villaDTO);
     }
 
+    [HttpDelete("{id:int}")]
+    public IActionResult DeleteVilla(int id)
+    {
+        var result = VillaStore.villaList.FirstOrDefault(c => c.Id == id);
+        if (result==null)
+        {
+            return NotFound();
+        }
+
+        VillaStore.villaList.Remove(result);
+        return Ok();    
+    }
 }
