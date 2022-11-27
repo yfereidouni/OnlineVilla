@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using OnlineVilla_API.Data;
+using OnlineVilla_API.Logging;
 using OnlineVilla_API.Models;
 using OnlineVilla_API.Models.Dto;
 
@@ -12,9 +13,10 @@ namespace OnlineVilla_API.Controllers;
 [ApiController]
 public class VillaAPIController : ControllerBase
 {
-    private readonly ILogger<VillaAPIController> _logger;
+    //private readonly ILogger<VillaAPIController> _logger;
+    private readonly ILogging _logger;
 
-    public VillaAPIController(ILogger<VillaAPIController> logger)
+    public VillaAPIController(ILogging logger)
     {
         _logger = logger;
     }
@@ -23,7 +25,9 @@ public class VillaAPIController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<IEnumerable<VillaDTO>> GetVillas()
     {
-        _logger.LogInformation("Getting all Villas!");
+        //_logger.LogInformation("Getting all Villas!");
+        _logger.Log("Getting all Villas!", "");
+
         return Ok(VillaStore.villaList);
     }
 
@@ -38,7 +42,8 @@ public class VillaAPIController : ControllerBase
     {
         if (id == 0)
         {
-            _logger.LogInformation($"Get Villa Error with Id: {id}");
+            //_logger.LogInformation($"Get Villa Error with Id: {id}");
+            _logger.Log($"Get Villa Error with Id: {id}", "error");
             return BadRequest();
         }
 
@@ -137,7 +142,7 @@ public class VillaAPIController : ControllerBase
         }
 
         var villa = VillaStore.villaList.FirstOrDefault(c => c.Id == id);
-        
+
         if (villa == null)
         {
             return NotFound();
